@@ -1,6 +1,10 @@
 import tkinter
 from math import *
 from time import sleep
+def _from_rgb(rgb):
+    """translates an rgb tuple of int to a tkinter friendly color code
+    """
+    return "#%02x%02x%02x" % rgb 
 
 g=1
 
@@ -10,6 +14,9 @@ l2 = l1
 teta1 = pi/2.5
 teta2 = pi/6
 
+blue = 0
+red = 200
+count = 0
 w1 = 0
 w2 = 0
 
@@ -37,24 +44,33 @@ window.resizable(width=False,height=False)
 window.geometry("700x600")
 c = tkinter.Canvas(window,width=700,height=600,bg='black')
 c.pack()
-c.create_oval(origin_x-origin_size/2,origin_y-origin_size/2,origin_x+origin_size/2,origin_y+origin_size/2,fill='red')
 
 
 while True:
 
-        line1=c.create_line(origin_x,origin_y,first_masse_x,first_masse_y,fill='white')
+        c.create_oval(origin_x-origin_size/2,origin_y-origin_size/2,origin_x+origin_size/2,origin_y+origin_size/2,fill='magenta')
+        line1=c.create_line(origin_x,origin_y,first_masse_x,first_masse_y,fill='gray40',width=3)
 
         #first masse
         cir1=c.create_oval(first_masse_x-m1*100/2,first_masse_y-m1*100/2,first_masse_x+m1*100/2,
-                        first_masse_y+m1*100/2,fill='blue')
+                        first_masse_y+m1*100/2,fill='blue',outline='gray40',width=3)
+
+
+        line2=c.create_line(first_masse_x,first_masse_y,second_masse_x,second_masse_y,fill='gray40',width=3)
+
+        pretty_line = c.create_line(second_masse_x,second_masse_y,prev_sec_masse_x,prev_sec_masse_y,fill=_from_rgb((red,0,blue)),width=3)
+
         #second masse
         cir2=c.create_oval(second_masse_x-m2*100/2,second_masse_y-m2*100/2,second_masse_x+m2*100/2
-                        ,second_masse_y+m2*100/2,fill='blue')
+                        ,second_masse_y+m2*100/2,fill='blue',outline='gray40',width=3)
 
 
-        line2=c.create_line(first_masse_x,first_masse_y,second_masse_x,second_masse_y,fill='white')
+        
+        red  = (red + 5) % 190 + 10
+        
+        blue = (blue + 1) % 190 + 10
 
-        pretty_line = c.create_line(second_masse_x,second_masse_y,prev_sec_masse_x,prev_sec_masse_y,fill='green',width=3)
+        
         prev_sec_masse_x = second_masse_x
         prev_sec_masse_y = second_masse_y
 
@@ -83,7 +99,7 @@ while True:
         second_masse_x = first_masse_x + l2 * sin(teta2)
         second_masse_y = first_masse_y + l2 * cos(teta2)
         c.update()
-        sleep(0.02)
+        sleep(0.03)
         c.delete(line1,line2,cir1,cir2)
 
 window.mainloop()
